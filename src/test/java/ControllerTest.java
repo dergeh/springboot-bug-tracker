@@ -78,6 +78,22 @@ public class ControllerTest {
     }
 
     @Test
+    public void deleteByIdTest(){
+        when(service.deleteById("test")).thenReturn(true);
+        when(service.deleteById("no")).thenReturn(false);
+
+        //ticket exists
+        ResponseEntity testResponse=controller.deleteById("test");
+        assertEquals(HttpStatus.OK,testResponse.getStatusCode());
+
+        //ticket doesn't exist
+        ResponseEntity<Ticket> testResponseNotFound = controller.deleteById("no");
+        assertEquals(HttpStatus.NOT_FOUND, testResponseNotFound.getStatusCode());
+
+        verify(service, times(2)).deleteById(anyString());
+    }
+
+    @Test
     public void updateTicketTest() {
         Ticket updatedTicket = new Ticket("test", "test ticket updated", false);
         when(service.findById(eq("test"))).thenReturn(testTicket);

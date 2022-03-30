@@ -79,4 +79,22 @@ public class ServiceTest {
 
 
     }
+
+    @Test
+    public void deleteById(){
+        doNothing().when(dao).deleteById(anyString());
+        when(dao.findById(eq("test"))).thenReturn(Optional.of(testTicket));
+        when(dao.findById(eq("no"))).thenReturn(Optional.empty());
+
+        //delete ticket thats present
+        boolean deleted=service.deleteById("test");
+        assertTrue(deleted);
+
+        // fail delete if not present
+        boolean notDeleted=service.deleteById("no");
+        assertFalse(notDeleted);
+
+        verify(dao, times(2)).deleteById(anyString());
+        verify(dao, times(2)).findById(anyString());
+    }
 }

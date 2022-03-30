@@ -41,4 +41,11 @@ public class TicketController {
         Ticket updated = ticketService.update(id, ticket);
         return ResponseEntity.ok(updated);
     }
+
+    @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity deleteById(@PathVariable String id) {
+        boolean deleted = ticketService.deleteById(id);
+        if (deleted) return ResponseEntity.ok().build();
+        return ResponseEntity.notFound().build();
+    }
 }
