@@ -20,6 +20,15 @@ public class Ticket {
     private String description;
     private boolean open;
 
+    public Ticket() {
+    }
+
+    public Ticket(String id, String description, boolean open) {
+        this.id = id;
+        this.description = description;
+        this.open = open;
+    }
+
     public String getDescription() {
         return description;
     }
