@@ -10,5 +10,5 @@ public interface TicketService {
 
     Ticket update(String id, Ticket ticket);
 
-    Ticket get(String id);
+    Ticket findById(String id);
 }

@@ -28,16 +28,16 @@ public class TicketController {
     }
 
     @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
-    public ResponseEntity getTicket(@PathVariable String id) {
-        Ticket found = ticketService.get(id);
+    public ResponseEntity getTicketById(@PathVariable String id) {
+        Ticket found = ticketService.findById(id);
         if (found == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         return ResponseEntity.ok(found);
     }
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Ticket> updateTicket(@RequestBody Ticket ticket, @PathVariable String id) {
-        Ticket found = ticketService.get(id);
-        if (found == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    public ResponseEntity updateTicket(@RequestBody Ticket ticket, @PathVariable String id) {
+        Ticket found = ticketService.findById(id);
+        if (found == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         Ticket updated = ticketService.update(id, ticket);
         return ResponseEntity.ok(updated);
     }

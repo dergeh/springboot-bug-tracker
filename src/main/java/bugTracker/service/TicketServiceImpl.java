@@ -32,7 +32,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public Ticket get(String id) {
+    public Ticket findById(String id) {
         Optional<Ticket> ticketOptional = ticketRepo.findById(id);
         if (ticketOptional.isPresent()) return ticketOptional.get();
         return null;

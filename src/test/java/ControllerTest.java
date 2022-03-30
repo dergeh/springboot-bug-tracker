@@ -16,6 +16,8 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class ControllerTest {
 
+    private final Ticket testTicket = new Ticket("test", "test ticket", true);
+
     @InjectMocks
     TicketController controller;
 
@@ -24,7 +26,6 @@ public class ControllerTest {
 
     @Test
     public void createTicketTest() {
-        Ticket testTicket = new Ticket("test", "test ticket", true);
         Ticket emptyTicket = new Ticket(null, null, false);
         when(service.create(any())).thenReturn(testTicket);
 
@@ -46,42 +47,40 @@ public class ControllerTest {
 
     @Test
     public void createNoIdTest() {
-        Ticket testTicket = new Ticket(null, "test ticket", true);
-        when(service.create(any())).thenReturn(testTicket);
+        Ticket testNoIdTicket = new Ticket(null, "test ticket", true);
+        when(service.create(any())).thenReturn(testNoIdTicket);
 
-        ResponseEntity<Ticket> testResponse = controller.createTicket(testTicket);
+        ResponseEntity<Ticket> testResponse = controller.createTicket(testNoIdTicket);
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, testResponse.getStatusCode());
         assertNull(testResponse.getBody());
 
-        verify(service, times(1)).create(testTicket);
+        verify(service, times(1)).create(testNoIdTicket);
 
 
     }
 
     @Test
-    public void getTicketTest() {
-        Ticket testTicket = new Ticket("test", "test ticket", true);
-        when(service.get(eq("test"))).thenReturn(testTicket);
+    public void getTicketByIdTest() {
+        when(service.findById(eq("test"))).thenReturn(testTicket);
 
         //ticket exists
-        ResponseEntity<Ticket> testResponse = controller.getTicket("test");
+        ResponseEntity<Ticket> testResponse = controller.getTicketById("test");
         assertEquals(HttpStatus.OK, testResponse.getStatusCode());
         assertEquals("test", testResponse.getBody().getId());
         assertTrue(testResponse.getBody().isOpen());
         assertEquals("test ticket", testResponse.getBody().getDescription());
 
         //ticket doesn't exist
-        ResponseEntity<Ticket> testResponseNotFound = controller.getTicket("no");
+        ResponseEntity<Ticket> testResponseNotFound = controller.getTicketById("no");
         assertEquals(HttpStatus.NOT_FOUND, testResponseNotFound.getStatusCode());
 
-        verify(service, times(2)).get(anyString());
+        verify(service, times(2)).findById(anyString());
     }
 
     @Test
     public void updateTicketTest() {
-        Ticket testTicket = new Ticket("test", "test ticket", true);
         Ticket updatedTicket = new Ticket("test", "test ticket updated", false);
-        when(service.get(eq("test"))).thenReturn(testTicket);
+        when(service.findById(eq("test"))).thenReturn(testTicket);
         when(service.update(anyString(), any())).thenReturn(updatedTicket);
 
         // success
@@ -96,7 +95,7 @@ public class ControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, testResponseFail.getStatusCode());
         assertNull(testResponseFail.getBody());
 
-        verify(service, times(2)).get(anyString());
+        verify(service, times(2)).findById(anyString());
         verify(service, times(1)).update(anyString(), any());
     }
 }
