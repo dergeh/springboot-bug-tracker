@@ -14,7 +14,6 @@ public class TicketServiceImpl implements TicketService {
     TicketRepo ticketRepo;
 
 
-
     @Override
     public Ticket create(Ticket ticket) {
         return ticketRepo.save(ticket);
@@ -28,14 +27,14 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public Ticket update(String id, Ticket ticket) {
         Optional<Ticket> ticketOptional = ticketRepo.findById(id);
-        if(ticketOptional.isPresent())return ticketRepo.save(ticket);
+        if (ticketOptional.isPresent()) return ticketRepo.save(ticket);
         return null;
     }
 
     @Override
     public Ticket get(String id) {
         Optional<Ticket> ticketOptional = ticketRepo.findById(id);
-        if(ticketOptional.isPresent())return ticketOptional.get();
+        if (ticketOptional.isPresent()) return ticketOptional.get();
         return null;
     }
 }
